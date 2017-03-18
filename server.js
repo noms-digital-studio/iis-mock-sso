@@ -1,0 +1,73 @@
+'use strict';
+
+let logger = require('./log.js');
+
+let express = require('express');
+let path = require('path');
+let request = require("request");
+let util = require("util");
+
+let app = express();
+
+
+// CHANGE these if needed
+
+app.set('port', 3001); // where to run this app
+let user = require('./users/user_1.json'); // user profile to return
+let callbackUrl = 'http://localhost:3000/authentication?code=123'; // where the IIS webap is running
+
+//
+
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+var route = express.Router();
+
+app.use('/', route);
+
+route.get('/oauth/authorize', function(req, res) {
+    logger.info('GET authorize');
+    // res.redirect(callbackUrl);
+    res.render('sso');
+});
+
+route.get('/authorized', function(req, res) {
+    logger.info('AUTHORIZED user');
+    res.redirect(callbackUrl);
+});
+
+route.get('/unauthorized', function(req, res) {
+    logger.info('UNAUTHORIZED user');
+    res.status(401).send('You are not authorized');
+});
+
+route.post('/oauth/token', function(req, res) {
+    logger.info('POST token');
+    let token = {};
+    res.send(token);
+});
+
+route.get('/api/user_details', function(req, res) {
+    logger.info('GET user_details');
+    res.send(user);
+});
+
+route.get('/profile', function(req, res) {
+    logger.info('GET profile');
+    res.send('Mock user profile page');
+});
+
+route.get('/users/sign_out', function(req, res) {
+    logger.info('GET sign_out');
+    res.send('Mock sign out page');
+});
+
+app.use(function(req, res, next) {
+    logger.error('Unhandled request: ' + req.method + ':' + req.path);
+    res.sendStatus(404);
+});
+
+app.listen(app.get('port'), function() {
+    logger.info('Express server listening on port ' + app.get('port'));
+});

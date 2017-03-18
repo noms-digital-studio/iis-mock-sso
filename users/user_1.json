@@ -1,0 +1,13 @@
+{
+  "id": 1,
+  "email": "joe@example.com",
+  "first_name": "Joe",
+  "last_name": "Bloggs",
+  "permissions": [
+    {"organisation": "digital.moj", "roles": ["default"]}
+  ],
+  "links": {
+    "profile": "http://localhost:3001/profile",
+    "logout": "http://localhost:3001/users/sign_out"
+  }
+}

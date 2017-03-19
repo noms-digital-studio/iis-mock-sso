@@ -76,6 +76,10 @@ route.get('/users/sign_out', function(req, res) {
     res.send('Mock sign out page');
 });
 
+app.get('/favicon.ico', function(req, res) {
+    res.sendStatus(204);
+});
+
 app.use(function(req, res, next) {
     logger.error('Unhandled request: ' + req.method + ':' + req.path);
     res.sendStatus(404);

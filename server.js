@@ -6,8 +6,11 @@ let express = require('express');
 let path = require('path');
 let request = require("request");
 let util = require("util");
+let bodyParser = require('body-parser');
 
 let app = express();
+
+
 
 
 // CHANGE these if needed
@@ -16,9 +19,14 @@ app.set('port', 3001); // where to run this app
 let user = require('./users/user_1.json'); // user profile to return
 let callbackUrl = 'http://localhost:3000/authentication?code=123'; // where the IIS webap is running
 
-//
+// Interactive mode
+let interactive = process.env.INTERACTIVE;
 
 
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -28,8 +36,12 @@ app.use('/', route);
 
 route.get('/oauth/authorize', function(req, res) {
     logger.info('GET authorize');
-    // res.redirect(callbackUrl);
-    res.render('sso');
+    logger.info(util.inspect(req.query));
+    if(interactive === 'true') {
+        res.render('sso');
+    } else {
+        res.redirect(callbackUrl);
+    }
 });
 
 route.get('/authorized', function(req, res) {
@@ -44,6 +56,7 @@ route.get('/unauthorized', function(req, res) {
 
 route.post('/oauth/token', function(req, res) {
     logger.info('POST token');
+    logger.info(util.inspect(req.body));
     let token = {};
     res.send(token);
 });

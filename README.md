@@ -18,6 +18,10 @@ If you wanted, you could create multiple profiles and modify the SSO view to all
 * npm install
 * npm start
 
+Or, if you want interactive login mode, use
+
+* INTERACTIVE=true npm start
+
 
 # Operation
 
@@ -34,8 +38,13 @@ The user profile includes links for signo out and profile management, which are:
 * Profile - http://localhost:3001/profile
 * Sign Out - http://localhost:3001/users/sign_out
 
-When your app initiates authentication the first call will be to /oauth/authorize. This will cause
-the 'sso' view to be rendered. On this page you can select whether or not to authorize the user.
-Unauthorised users will receive a 401 response. For authorised users, your aplications redirect URL
+When your app initiates authentication the first call will be to /oauth/authorize.
+
+When using INTERACTIVE mode, this will cause the 'sso' view to be rendered. On this page you can
+select whether or not to authorize the user.
+
+In automatic / non-interactive mode, authorization will succeed.
+
+'Unauthorised' causes a 401 response. When 'Authorised', your application's redirect URL
 will be called with a dummy authentication code. Your app should then call /oauth/token and optionally 
 /api/user_details to retrieve the profile.

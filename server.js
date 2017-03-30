@@ -17,7 +17,6 @@ let app = express();
 
 app.set('port', 3001); // where to run this app
 let user = require('./users/user_1.json'); // user profile to return
-let callbackUrl = 'http://localhost:3000/authentication?code=123'; // where the IIS webap is running
 
 // Interactive mode
 let interactive = process.env.INTERACTIVE;
@@ -38,15 +37,15 @@ route.get('/oauth/authorize', function(req, res) {
     logger.info('GET authorize');
     logger.info(util.inspect(req.query));
     if(interactive === 'true') {
-        res.render('sso');
+        res.render('sso', {redirect_uri: encodeURIComponent(req.query.redirect_uri)});
     } else {
-        res.redirect(callbackUrl);
+        res.redirect(req.query.redirect_uri + "?code=123");
     }
 });
 
 route.get('/authorized', function(req, res) {
     logger.info('AUTHORIZED user');
-    res.redirect(callbackUrl);
+    res.redirect(req.query.redirect_uri + "?code=123");
 });
 
 route.get('/unauthorized', function(req, res) {

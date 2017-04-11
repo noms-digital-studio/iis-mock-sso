@@ -7,3 +7,17 @@ div
             a(href='/authorized?redirect_uri=#{redirect_uri}') Authorized
         li
             a(href='/unauthorized') Not Authorized
+
+
+    form(action='/authorized', method='post')
+
+        input(type="hidden" name="redirect_uri" value="#{redirect_uri}")
+
+        div.form-group
+            label(for="user_email") Email
+            input.form-control#user_email(type="text", name="user[email]")
+        div.form-group
+            label(for="user_password") Password
+            input.form-control#user_password(type="text", name="user[password]")
+        div.form-group
+            input(type="submit" name="commit" value="Sign in" class="button")

@@ -34,6 +34,7 @@ var route = express.Router();
 app.use('/', route);
 
 route.get('/oauth/authorize', function(req, res) {
+    logger.info('');
     logger.info('GET authorize');
     logger.info(util.inspect(req.query));
     if(interactive === 'true') {
@@ -44,8 +45,15 @@ route.get('/oauth/authorize', function(req, res) {
 });
 
 route.get('/authorized', function(req, res) {
-    logger.info('AUTHORIZED user');
+    logger.info('GET AUTHORIZED user');
+    logger.info(req.query.redirect_uri);
     res.redirect(req.query.redirect_uri + "?code=123");
+});
+
+route.post('/authorized', function(req, res) {
+    logger.info('POST AUTHORIZED user');
+    logger.info(unescape(req.body.redirect_uri));
+    res.redirect(unescape(req.body.redirect_uri) + "?code=123");
 });
 
 route.get('/unauthorized', function(req, res) {
@@ -67,11 +75,12 @@ route.get('/api/user_details', function(req, res) {
 
 route.get('/profile', function(req, res) {
     logger.info('GET profile');
-    res.send('Mock user profile page');
+    res.render('profile');
 });
 
 route.get('/users/sign_out', function(req, res) {
     logger.info('GET sign_out');
+    logger.info('');
     res.send('Mock sign out page');
 });
 

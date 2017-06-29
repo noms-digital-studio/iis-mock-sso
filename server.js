@@ -11,12 +11,20 @@ let bodyParser = require('body-parser');
 let app = express();
 
 
+if (process.argv.length <= 2 || ! isWorkEmail(process.argv[2])) {
+    console.log("Usage: npm start <your work email address>");
+    process.exit(-1);
+}
 
-
-// CHANGE these if needed
+function isWorkEmail(email){
+    return process.argv[2].indexOf('@digital.justice.gov.uk') > -1  && process.argv[2].length > 26;
+}
 
 app.set('port', 3001); // where to run this app
 let user = require('./users/user_1.json'); // user profile to return
+user.email = process.argv[2];
+
+
 
 // Interactive mode
 let interactive = process.env.INTERACTIVE;

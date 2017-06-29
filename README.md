@@ -16,11 +16,11 @@ If you wanted, you could create multiple profiles and modify the SSO view to all
 # Start Server
 
 * npm install
-* npm start
+* npm start <your work email address>
 
 Or, if you want interactive login mode, use
 
-* INTERACTIVE=true npm start
+* INTERACTIVE=true npm start <your work email address>
 
 
 # Operation

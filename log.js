@@ -1,20 +1,23 @@
 'use strict';
 
-let logger = require('winston');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, colorize, prettyPrint, json, printf } = format;
+const myFormat = printf(({ level, message, label, timestamp }) => {
+    return `${timestamp} - ${level}: ${message}`;
+});
+const logger = createLogger({
+    format: combine(
+        colorize(),
+        timestamp(),
+        prettyPrint(),
+        myFormat
+    )
+});
 
 if (process.env.NODE_ENV === 'test') {
-    logger.remove(logger.transports.Console);
-    logger.add(logger.transports.File, {filename: 'iis-mock-sso.log' });
-
+    logger.add(new transports.File({ filename: 'iis-mock-sso.log' }));
 } else {
-    logger.remove(logger.transports.Console);
-    logger.add(logger.transports.Console, {
-        prettyPrint: true,
-        colorize: true,
-        silent: false,
-        timestamp: true
-        // json: true
-    });
+    logger.add(new transports.Console());
 }
 
 module.exports=logger;

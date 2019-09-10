@@ -15,8 +15,10 @@ const logger = createLogger({
 });
 
 if (process.env.NODE_ENV === 'test') {
+    logger.remove(new transports.Console());
     logger.add(new transports.File({ filename: 'iis-mock-sso.log' }));
 } else {
+    logger.remove(new transports.Console());
     logger.add(new transports.Console());
 }
 
